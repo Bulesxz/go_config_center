@@ -1,4 +1,4 @@
-# 基于zookeeper&viper 的 golang 动态使用配置库 (JSON格式) 
+# 基于zookeeper&viper 的 golang 动态配置使用库 (JSON格式) 
 
 ### 此库通过zookeeper获取json 配置文件,viper读取配置内容,当zookeeper内容变化时，viper内容自动更新(协程序安全);并且本地缓存配置文件，当zookeeper 不可用时，读取本地缓存 保证服务可用
 
