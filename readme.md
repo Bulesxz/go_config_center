@@ -4,7 +4,7 @@
 
 1. 使用方法
 ``` golang
-center := NewConfigCenter("", nil, "")
+center := NewConfigCenter("", nil, "","json")
 module := center.GetModule("/test.json")
 fmt.Println("--------------------a:", module.GetInt("a"))
 ```
