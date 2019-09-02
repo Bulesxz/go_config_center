@@ -27,6 +27,8 @@ func NewConfigModule(modulePath string, localCacheDir string, configType string)
 	c := &ConfigModule{}
 	if localCacheDir == "" {
 		c.localCacheDir = DEFAULT_LOCAL_CACHE_DIR
+	} else {
+		c.localCacheDir = localCacheDir
 	}
 	if strings.HasPrefix(modulePath, "/") {
 		c.cfgFile = c.localCacheDir + modulePath

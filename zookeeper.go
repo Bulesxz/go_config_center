@@ -113,7 +113,6 @@ Loop:
 		case <-s.cancelCtx.Done():
 			break
 		}
-		break
 	}
 }
 
