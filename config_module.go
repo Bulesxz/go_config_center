@@ -20,9 +20,10 @@ type ConfigModule struct {
 	cfg           *viper.Viper
 	lock          sync.RWMutex
 	localCacheDir string
+	configType    string
 }
 
-func NewConfigModule(modulePath string, localCacheDir string) *ConfigModule {
+func NewConfigModule(modulePath string, localCacheDir string, configType string) *ConfigModule {
 	c := &ConfigModule{}
 	if localCacheDir == "" {
 		c.localCacheDir = DEFAULT_LOCAL_CACHE_DIR
@@ -42,7 +43,12 @@ func NewConfigModule(modulePath string, localCacheDir string) *ConfigModule {
 	}
 	log.Println("mkdir:", dir)
 	c.cfg = viper.New()
-	c.cfg.SetConfigType("json")
+	if configType == "" {
+		c.configType = "json"
+	} else {
+		c.configType = configType
+	}
+	c.cfg.SetConfigType(c.configType)
 	return c
 }
 
@@ -53,7 +59,7 @@ func (c *ConfigModule) loadFromBuf(data []byte) error {
 	copy(c.buf, data)
 	c.lock.Lock()
 	cfg := viper.New()
-	cfg.SetConfigType("json")
+	cfg.SetConfigType(c.configType)
 	err := cfg.ReadConfig(bytes.NewReader(c.buf))
 	if err != nil {
 		c.lock.Unlock()
@@ -84,7 +90,7 @@ func (c *ConfigModule) loadFromLocalCache() error {
 	c.buf = data
 	c.lock.Lock()
 	cfg := viper.New()
-	cfg.SetConfigType("json")
+	cfg.SetConfigType(c.configType)
 	err = cfg.ReadConfig(bytes.NewReader(c.buf))
 	if err != nil {
 		c.lock.Unlock()
@@ -143,6 +149,12 @@ func (c *ConfigModule) GetStringMapString(key string) map[string]string {
 	c.lock.RLock()
 	defer c.lock.RUnlock()
 	return c.cfg.GetStringMapString(key)
+}
+
+func (c *ConfigModule) GetStringMap(key string) map[string]interface{} {
+	c.lock.RLock()
+	defer c.lock.RUnlock()
+	return c.cfg.GetStringMap(key)
 }
 
 // func (c *ConfigModule) SetOnChange(watch func(data []byte)) {

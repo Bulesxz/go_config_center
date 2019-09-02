@@ -15,9 +15,11 @@ type ConfigCenter struct {
 	zkRoot        string
 	zkServers     []string
 	localCacheDir string
+	configType    string
 }
 
-func NewConfigCenter(zkRoot string, zkServers []string, localCacheDir string) *ConfigCenter {
+// configType 默认json
+func NewConfigCenter(zkRoot string, zkServers []string, localCacheDir string, configType string) *ConfigCenter {
 	log.SetFlags(log.Llongfile | log.Ltime)
 	center := new(ConfigCenter)
 	center.initZk()
@@ -34,6 +36,7 @@ func NewConfigCenter(zkRoot string, zkServers []string, localCacheDir string) *C
 		center.zkServers = zkServers
 	}
 	center.localCacheDir = localCacheDir
+	center.configType = configType
 	return center
 }
 
@@ -66,7 +69,7 @@ func (c *ConfigCenter) GetModule(modulePath string) *ConfigModule {
 	var err error
 	var data []byte
 	zkPath := c.getModuleZkPath(modulePath)
-	module := NewConfigModule(modulePath, c.localCacheDir)
+	module := NewConfigModule(modulePath, c.localCacheDir, c.configType)
 	if c.zk != nil {
 		data, err = c.zk.GetData(zkPath)
 		if err != nil {

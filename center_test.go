@@ -9,8 +9,8 @@ import (
 
 //go test -v -run TestA
 func TestA(t *testing.T) {
-	center := NewConfigCenter("", nil, "")
-	module := center.GetModule("/test.json")
+	center := NewConfigCenter("", nil, "", "json")
+	module := center.GetModule("/gateway/test.json")
 	fmt.Println("============module================")
 	fmt.Println("--------------------a:", module.GetInt("a"))
 	fmt.Println("--------------------b:", module.GetInt("b"))
@@ -28,8 +28,8 @@ func TestTempFile(t *testing.T) {
 
 //go test -v -bench="."  -benchtime=10s -run=BenchmarkGetInt
 func BenchmarkGetInt(b *testing.B) {
-	center := NewConfigCenter("", nil, "")
-	module := center.GetModule("/test.json")
+	center := NewConfigCenter("", nil, "", "json")
+	module := center.GetModule("/gateway/test.json")
 	fmt.Println("============module================")
 	for i := 0; i < b.N; i++ {
 		fmt.Println("--------------------a:", module.GetInt("a"))
