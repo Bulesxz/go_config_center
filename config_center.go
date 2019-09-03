@@ -41,7 +41,9 @@ func NewConfigCenter(zkRoot string, zkServers []string, localCacheDir string, co
 }
 
 func (c *ConfigCenter) Close() {
-	c.zk.Close()
+	if c.zk != nil {
+		c.zk.Close()
+	}
 }
 
 func (c *ConfigCenter) initZk() error {

@@ -64,7 +64,9 @@ func (s *ZkClient) EventCallback(ch_event zk.Event) {
 func (s *ZkClient) Close() {
 	s.cancel()
 	atomic.StoreInt32(&s.status, 0)
-	s.conn.Close()
+	if s.conn != nil {
+		s.conn.Close()
+	}
 }
 
 func (s *ZkClient) ensureRoot() error {
